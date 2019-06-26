@@ -29,7 +29,6 @@ def display(values):
 
 def grid_values(grid):
     """Convert grid string into {<box>: <value>} dict with '123456789' value for empties.
-
     Args:
         grid: Sudoku grid in string form, 81 characters long
     Returns:
@@ -53,10 +52,8 @@ def grid_values(grid):
 
 def eliminate(values):
     """Eliminate values from peers of each box with a single value.
-
     Go through all the boxes, and whenever there is a box with a single value,
     eliminate this value from the set of values of all its peers.
-
     Args:
         values: Sudoku in dictionary form.
     Returns:
@@ -71,10 +68,8 @@ def eliminate(values):
 
 def only_choice(values):
     """Finalize all values that are the only choice for a unit.
-
     Go through all the units, and whenever there is a unit with a value
     that only fits in one box, assign the value to this box.
-
     Input: Sudoku in dictionary form.
     Output: Resulting Sudoku in dictionary form after filling in only choices.
     """
@@ -109,3 +104,21 @@ def reduce_puzzle(values):
         if len([box for box in values.keys() if len(values[box]) == 0]):
             return False
     return values
+
+def search(values):
+    "Using depth-first search and propagation, try all possible values."
+    # First, reduce the puzzle using the previous function
+    values = reduce_puzzle(values)
+    if values is False:
+        return False ## Failed earlier
+    if all(len(values[s]) == 1 for s in boxes):
+        return values ## Solved!
+    # Choose one of the unfilled squares with the fewest possibilities
+    n,s = min((len(values[s]), s) for s in boxes if len(values[s]) > 1)
+    # Now use recurrence to solve each one of the resulting sudokus, and
+    for value in values[s]:
+        new_sudoku = values.copy()
+        new_sudoku[s] = value
+        attempt = search(new_sudoku)
+        if attempt:
+            return attempt
