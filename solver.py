@@ -38,6 +38,7 @@ def main():
 
     print(url)
     driver = webdriver.Chrome("/usr/lib/chromium-browser/chromedriver")
+    driver.maximize_window()
     driver.get(url)
 
 
