@@ -10,3 +10,4 @@ Run the following command on your Linux terminal.
 ```bash
 python solver.py [--level easy/medium/hard/expert]
 ```
+![](sample_output.gif)
